@@ -1,0 +1,16 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: rgb(240, 240, 240);
+  color: rgb(255, 255, 255);
+  background-image: url("background.jpg");
+  background-size: cover;   
+  background-repeat: no-repeat;  
+  background-position: center;   
+  background-attachment: fixed;
+  position: absolute;
+  
+}
+/* 
+dark pruple = 6B00A3
+purple = A700ED
+black = 070707 */

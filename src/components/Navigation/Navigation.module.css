@@ -1,0 +1,333 @@
+.main{
+    padding: 30px 150px;
+    display: flex;
+}
+.navbar{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 0 auto;
+    gap: 220px;
+    width: 1500px;
+    border-radius: 50px;
+    height: 80px;
+    background-color: #ffffff;
+}
+svg{
+    color: #000000;
+    font-weight: bold;
+}
+.brand{
+    width: 150px;
+    cursor: pointer;
+}
+.category{
+    display: flex;
+    margin: 0;
+    gap: 30px;
+    align-items: center;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.item{
+    display: grid;
+    transition: 0.2s;
+    width: 100px;      
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000000;
+    transition: 0.3s;
+}
+.item:hover{
+    color: #A700ED;
+    text-shadow:
+        0 0 25px #e097ff;
+    font-weight: bold;
+    transform: scale(1.05);
+}
+
+.signO{
+    display: flex;
+    gap: 20px;
+}
+.signin{
+    display: flex;
+    margin: auto;
+    width: 100px;
+    height: 40px;
+    font-size: 15px;
+    background-color: #A700ED;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: 0.4s;
+    text-decoration: none;
+    text-align: center;
+
+}
+.signin:hover{
+    transform: scale(1.05);
+}
+.getStarted{
+    width: 120px;
+    height: 40px;
+    font-size: 15px;
+    text-decoration: none;
+    display: flex;
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: 0.4s;
+}
+.getStarted:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgb(12, 12, 12);
+
+}
+.navbarMobile{
+    justify-content: flex-end;
+    align-items: center;
+    display: none;
+    top: 0;
+    right: 0;
+    position: fixed;
+    width: 350px;
+    border-radius: 10px;
+    height: 100vh;
+    box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.144);
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+}
+.menu{
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    margin: auto;
+}
+.close{
+    display: flex;
+    margin: auto;
+    margin-top: -40px;
+    top: 50px;
+    margin-right: 50px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.brandMobile{
+    width: 150px;
+    justify-content: left;
+    margin-right: 180px;
+    cursor: pointer;
+}
+.categoryMobile{
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+    top: -10px;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.itemMobile{
+    display: grid;
+    transition: 0.2s;
+    width: 100px;    
+    margin-top: 50px;  
+    align-items: center;
+    justify-content: left;
+    text-decoration: none;
+    color: #000000;
+}
+.itemMobile:hover{
+    color: #A700ED;
+    text-shadow:0 0 25px #e097ff;
+    font-weight: bold;
+    transform: scale(1.05);
+}
+
+.signOMobile{
+    display: grid;
+    gap: 20px;
+    margin: auto;
+    align-items: center;
+}.signinMobile {
+    width: 260px;
+    height: 40px;
+    font-size: 15px;
+    background-color: #A700ED;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: 0.4s;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+}
+
+.signinMobile:hover{
+    transform: scale(1.05);
+}
+.getStartedMobile{
+    width: 260px;
+    height: 40px;
+    font-size: 15px;
+    display: flex;
+    text-decoration: none;
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: 0.4s;
+}
+.getStartedMobile:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgb(12, 12, 12);
+
+}
+
+@media (max-width : 1480px){
+    .navbar{
+        display: flex;
+        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        gap: 60px;
+        width: 100%;
+        padding: 0 20px;
+        border-radius: 50px;
+        height: 60px;
+     
+    }
+    .menu{
+        display: none;
+    }
+    .navbarMobile{
+        height: 100%;
+    }
+}
+@media (max-width : 912px){
+    .main{
+        padding: 30px 80px;
+        display: flex;
+    }
+    .navbar{
+        display: flex;
+        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        gap: 120px;
+        width: 100%;
+        padding: 0 20px;
+        border-radius: 50px;
+        height: 80px;
+     
+    }
+    .category{
+        display: flex;
+        gap: 90px;
+        font-size: 30px;
+    }
+    .item{
+        gap: 100px;
+    }
+    .signin{
+        display: none;
+    }
+    .getStarted{
+        display: none;
+    }
+    .navbarMobile{
+        height: 100%;
+    }
+    .menu{
+        align-items: center;
+        display: flex;
+    }
+}
+
+@media (max-width : 430px){
+    .main{
+        padding: 30px 10px;
+        display: flex;
+    }
+    .navbar{
+        display: flex;
+        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        gap: 100px;
+        width: 100%;
+        padding: 0 20px;
+        border-radius: 50px;
+        height: 60px;
+     
+    }
+    .category{
+        display: none;
+    }
+    .signin{
+        display: none;
+    }
+    .getStarted{
+        display: none;
+    }
+    .navbarMobile{
+        height: 100%;
+    }
+    .menu{
+        align-items: center;
+        margin-left: 20px;
+        display: flex;
+    }
+}@media (max-width : 360px){
+    
+    .brand{
+        width: 120px;
+    }
+    .navbarMobile{
+        width: 280px;
+    }
+    .brandMobile{
+        width: 120px;
+        margin-right: 100px;
+    }
+    .close{
+        margin-right: 30px;
+    }
+    .itemMobile{
+        margin-top: 30px;
+    }
+    .category{
+        display: none;
+    }
+    .signinMobile, .getStartedMobile{
+        width: 220px;
+    }
+    .menu{
+        margin-left: 0;
+    }
+}

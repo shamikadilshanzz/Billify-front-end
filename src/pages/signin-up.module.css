@@ -1,0 +1,11 @@
+.signInContainer {
+    display: grid;
+    place-items: center;
+ 
+  }
+  
+.signUp{
+    display: grid;
+    margin:  0 auto;
+    place-items: center;
+}

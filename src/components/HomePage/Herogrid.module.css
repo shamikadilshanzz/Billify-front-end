@@ -1,0 +1,145 @@
+.main{
+    padding: 0px 150px;
+    display: flex;
+}
+.left{
+    display: grid;
+}
+.head{
+    display: flex;
+    margin-top: 150px;
+    font-family: "Cal Sans", sans-serif;
+    font-size: 80px;
+    color: #A700ED;
+}.second{
+    display: flex;
+    font-family: "Cal Sans", sans-serif;
+    font-size: 80px;
+    font-weight: 80;
+    margin: -80px auto 0 auto; 
+    text-align: center;
+    margin-top: -130px;
+}
+.home1{
+    position: relative;
+    width: 600px;
+    margin-left: 300px;
+    margin-top: 150px;
+}
+.para{
+    font-size: 1.2rem;
+    margin-top: -50px;
+}
+.getStarted{
+    width: 180px;
+    height: 50px;
+    font-size: 20px;
+    text-decoration: none;
+    display: flex;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: 0.4s;
+    margin-top: -120px;
+}
+.getStarted:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgb(12, 12, 12);
+
+}
+
+@keyframes float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+.home1 {
+    animation: float 3s ease-in-out infinite;
+}
+
+@media (max-width: 912px) {
+    .main {
+        padding: 60px 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        text-align: left;
+    }
+
+    .head, .second {
+        font-size: 80px;
+        margin: 10px 0;
+        line-height: 80px;
+    }
+
+    .para {
+        font-size: 1.4rem;
+        margin: 20px 0;
+        margin-top: 50px;
+    }
+
+    .getStarted {
+        display: flex;
+        margin: auto;
+        width: 180px;
+        height: 60px;
+        align-items: left;
+        margin-left: -0px;
+        font-size: 1.5rem;
+    }
+
+    .home1 {
+        display: flex;
+        margin: auto;
+        width: 450px;
+        height: auto;        
+        justify-content: right;
+        margin: 20px 0;
+        margin-left: 800px;
+        margin-top: -450px;
+        position: relative;
+    }
+}
+
+@media (max-width: 430px) {
+    .main {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .head, .second {
+        font-size: 50px;
+        margin: 10px 0;
+        line-height: 50px;
+    }
+
+    .para {
+        font-size: 1.2rem;
+        margin: 20px 0;
+    }
+
+    .getStarted {
+        display: flex;
+        margin: auto;
+        width: 140px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .home1 {
+        width: 250px;
+        height: auto;
+        margin: 20px 0;
+        position: relative;
+    }
+}
+
