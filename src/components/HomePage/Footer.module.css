@@ -3,9 +3,11 @@
     padding: 60px 20px;
     display: flex;
     gap: 50px;
-    margin-left: -10px;
     justify-content: center;
+    align-items: flex-start;
     background-color: rgb(31, 0, 59);
+    width: 100%;
+    box-sizing: border-box;
 }
 .first{
     display: grid;

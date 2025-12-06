@@ -1,8 +1,8 @@
 import React from 'react'
 import fo from '../HomePage/Footer.module.css'
-export default function Footer() {
+export default function Footer({ className }) {
   return (
-    <div className={fo.main}>
+    <div className={`${fo.main} ${className || ''}`}>
         <div className={fo.first}>
             <div className={fo.oneSe}>
                 <h2 className={fo.brand}>Billify</h2>

@@ -6,6 +6,7 @@ import Powerful from "../components/HomePage/Powerful"
 import Reviews from "../components/HomePage/Reviews"
 import FAQS from "../components/HomePage/FAQS"
 import Footer from "../components/HomePage/Footer"
+import styles from './history.module.css';
 const HomePage = () => {
     return(
         <div>
@@ -14,7 +15,8 @@ const HomePage = () => {
             <Powerful/>
             <Reviews/>
             <FAQS/>
-            <Footer/>
+            <Footer className={styles.footer}/>
+            
         </div>
     )
 }

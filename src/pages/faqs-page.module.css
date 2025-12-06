@@ -1,0 +1,35 @@
+.faqsn{
+    padding: flex;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    place-items: center;
+    margin-bottom: 0px;
+}
+.footer{
+    width: 100%;
+    max-width: 1500px;
+    padding: 50px 150px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 0 auto;
+    gap: 220px;
+    border-radius: 30px;
+    height: 100%;
+    background-color: #1f003b;
+    box-sizing: border-box;
+  }
+
+@media (max-width : 430px){
+    
+    .footer {
+        padding: 30px 20px;
+        gap: 30px;
+        border-radius: 15px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+      }
+  }

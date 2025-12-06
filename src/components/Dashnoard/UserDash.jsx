@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Download, Edit2, Eye, Upload, Camera, Grape } from 'lucide-react';
 import styles from './userDash.module.css';
-import { collection, addDoc, setDoc } from 'firebase/firestore';
+import { useUser } from '@clerk/clerk-react';
+import { saveInvoice, updateInvoice } from '../../services/invoiceService';
 
-export default function UserDash({ onSave }) {
+export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, onSaveComplete }) {
+  const { user } = useUser();
   const [activeTab, setActiveTab] = useState('Preview');
   const [selectedColor, setSelectedColor] = useState('#A700ED');
   const [items, setItems] = useState([
@@ -44,8 +46,31 @@ export default function UserDash({ onSave }) {
     invoiceNumber: `IV${Math.floor(Math.random()*1000000)}`,
     invoiceDate: 'Nov 27, 2025',
     terms: 'On Receipt',
-    notes: ''
+    notes: '',
+    packagePrice: '0'
   });
+
+  // Load invoice data if editing
+  useEffect(() => {
+    if (initialInvoiceData && invoiceId) {
+      setSelectedColor(initialInvoiceData.selectedColor || '#A700ED');
+      setItems(initialInvoiceData.items || [{ id: 1, description: 'Item Description', details: '', rate: 0.00, qty: 1, amount: 0.00 }]);
+      setFinancingEnabled(initialInvoiceData.financingEnabled !== undefined ? initialInvoiceData.financingEnabled : true);
+      setLogoImage(initialInvoiceData.logoImage || null);
+      setSignatureImage(initialInvoiceData.signatureImage || null);
+      setPhotos(initialInvoiceData.photos || []);
+      setDiscountType(initialInvoiceData.discountType || 'percentage');
+      setDiscountValue(initialInvoiceData.discountValue || 0);
+      setPackagePrice(initialInvoiceData.packagePrice || 0);
+      setUpcomingTitle(initialInvoiceData.upcomingTitle || "Upcoming Payment");
+      setUpcomingDescription(initialInvoiceData.upcomingDescription || "");
+      setUpcomingItems(initialInvoiceData.upcomingItems || [{ id: 1, desc: "", price: 0.00 }]);
+      setPackagePrice(initialInvoiceData.packagePrice || 0);
+      if (initialInvoiceData.formData) {
+        setFormData(initialInvoiceData.formData);
+      }
+    }
+  }, [initialInvoiceData, invoiceId]);
 
   const colors = [
     '#9CFF00', '#FFAA00', '#FF7F00', '#FF0000',
@@ -189,7 +214,12 @@ export default function UserDash({ onSave }) {
     }
   };   
   
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+
     const data = {
       activeTab,
       selectedColor,
@@ -206,18 +236,31 @@ export default function UserDash({ onSave }) {
       discountValue,
       packagePrice,
       formData,
-      createdAt: new Date(),
     };
 
-    if (onSave) {
-      onSave(invoiceData); 
+    try {
+      if (invoiceId) {
+        // Update existing invoice
+        await updateInvoice(invoiceId, data);
+        console.log('Invoice updated successfully!');
+      } else {
+        // Create new invoice
+        await saveInvoice(data, user.id);
+        console.log('Invoice saved successfully!');
+      }
+      if (onSaveComplete) {
+        onSaveComplete();
+      }
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      alert('Failed to save invoice. Please try again.');
     }
   };
 
-  const handleDownloadAndSave = () => {
-  handleSave();   // save to Firestore
-  downloadPDF();         // generate PDF
-};
+  const handleDownloadAndSave = async () => {
+    await handleSave();   // save to Firestore
+    downloadPDF();         // generate PDF
+  };
 
   const downloadPDF = async () => {
     const printWindow = window.open('');
@@ -279,7 +322,7 @@ export default function UserDash({ onSave }) {
 
 
         .logo {
-          max-width: 90px;
+          max-width: 120px;
           border-radius: 8px;
           box-shadow: 0px 0px 10px black
         }
@@ -332,7 +375,10 @@ export default function UserDash({ onSave }) {
         .detail-value {
           color: #555;
         }
-
+        .package-value{
+          color: black;
+          font-weight: bold;          
+        }
         .items-table {
           width: 100%;
           border-collapse: collapse;
@@ -368,6 +414,7 @@ export default function UserDash({ onSave }) {
           width: 100%;
           border-collapse: collapse;
           margin-top: 30px;
+          color: white;
         }
 
         .items-tableM thead {
@@ -527,20 +574,26 @@ export default function UserDash({ onSave }) {
           </div>
           
           <div class="invoice-details">
-            <div class="detail-item">
-              <span class="detail-label">Number:</span> 
-              <span class="detail-value">${formData.invoiceNumber}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Date:</span> 
-              <span class="detail-value">${formData.invoiceDate}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Terms:</span> 
-              <span class="detail-value">${formData.terms}</span>
-            </div>
+          <div class="detail-item">
+            <span class="detail-label">Number:</span> 
+            <span class="detail-value">${formData.invoiceNumber}</span>
           </div>
-          
+
+          <div class="detail-item">
+            <span class="detail-label">Date:</span> 
+            <span class="detail-value">${formData.invoiceDate}</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Terms:</span> 
+            <span class="detail-value">${formData.terms}</span>
+          </div>
+        </div>
+        <br/>
+        <div class="detail-item">
+            <span class="detail-label">Package Price:</span>
+            <span class="package-value">Rs. ${parseFloat(packagePrice || 0).toFixed(2)}</span>
+          </div>    
           <table class="items-table">
             <thead>
               <tr>
@@ -607,18 +660,7 @@ export default function UserDash({ onSave }) {
             </tbody>
           </table>
 
-          <div class="notes-section">
-            <div class="section-titleM">${upcomingTitle}</div>
-            <div class="notes-content">
-              <p>Full Package: Rs. ${parseFloat(packagePrice||0).toFixed(2)}</p>
-              <p>Paid Now: Rs. ${parseFloat(total||0).toFixed(2)}</p>
-              <p>Remaining (before upcoming): Rs. ${Math.max(0, parseFloat(remainingBeforeUpcoming||0)).toFixed(2)}</p>
-              <p>Upcoming Items Total: Rs. ${parseFloat(upcomingTotal||0).toFixed(2)}</p>
-              <p>Remaining (after upcoming): Rs. ${Math.max(0, parseFloat(remainingAfterUpcoming||0)).toFixed(2)}</p>
-            </div>
-          </div>
-          
-          ${status()}
+                    ${status()}
           ${formData.notes ? `
             <div class="notes-section">
               <div class="section-title">Notes</div>

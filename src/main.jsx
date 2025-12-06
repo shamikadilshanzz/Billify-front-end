@@ -13,6 +13,8 @@ import FAQS from './components/HomePage/FAQS.jsx'
 import FAQSPage from './pages/faqs.page.jsx'
 import Pricing from './components/HomePage/Pricing.jsx'
 import PricePage from './pages/price.page.jsx'
+import HistoryPage from './pages/history.page.jsx'
+import InvoicePreviewPage from './pages/invoice-preview.page.jsx'
 /* 
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
@@ -60,8 +62,9 @@ createRoot(document.getElementById('root')).render(
           <Route path="/app/f&q" element={<FAQSPage />} />
           <Route path='/app/pricing' element = {<PricePage/>}/>
           <Route element={<ProtecedLayout />}>
-            {/* PASS FIRESTORE SAVE FUNCTION DOWN */}
             <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/history" element={<HistoryPage/>} />
+            <Route path="/invoice/:invoiceId/preview" element={<InvoicePreviewPage/>} />
           </Route>
         </Routes>
       </BrowserRouter>

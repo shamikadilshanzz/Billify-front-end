@@ -18,27 +18,31 @@ const Navigation = ()=> {
     return(
         <div className={na.main}>
             <header className={na.navbar}>
-                <Link>
-                    <img src="public/brand.png" className={na.brand}></img>
+                <Link to="/">
+                    <img src="/brand.png" className={na.brand} alt="Brand Logo"></img>
                 </Link>
                 <nav className={na.category}>
                     {[
                         {path:"/", label: "Home"},
-                        {path:"app/features", label: "Features"},
-                        {path:"app/testimonials", label: "Testimonials"},
-                        {path:"app/pricing", label: "Pricing"},
-                        {path:"app/f&q", label: "F&Q"},
+                        {path:"/app/features", label: "Features"},
+                        /* {path:"/app/testimonials", label: "Testimonials"}, */
+                        {path:"/app/pricing", label: "Pricing"},
+                        {path:"/app/f&q", label: "F&Q"},
                     ].map((item) => {
                         return <Link  to={item.path} className={na.item}>{item.label}</Link>
                     })}
+                    <SignedIn>
+                        {/* <Link to="/dashboard" className={na.item}>Dashboard</Link> */}
+                        <Link to="/history" className={na.item}>History</Link>
+                    </SignedIn>
                 </nav>
                 <div className={na.signO}>
                     <SignedIn>
                         <UserButton/>
                     </SignedIn>
                     <SignedOut>    
-                        <Link to='sign-in' className={na.signin}>SignIn</Link>
-                        <Link to='sign-up' className={na.getStarted}>SignUp</Link>
+                        <Link to='/sign-in' className={na.signin}>SignIn</Link>
+                        <Link to='/sign-up' className={na.getStarted}>SignUp</Link>
                     </SignedOut>
                     <svg 
                     xmlns="http://www.w3.org/2000/svg" 
@@ -52,7 +56,7 @@ const Navigation = ()=> {
             </header>
             <header className={na.navbarMobile} ref={mobileNavRef}>
                 <div>
-                    <img src="public/Brand-Img/brand.png" className={na.brandMobile}></img>
+                    <img src="/brand.png" className={na.brandMobile} alt="Brand Logo"></img>
                     <svg xmlns="http://www.w3.org/2000/svg" 
                         width="24" height="24" viewBox="0 0 24 24" 
                         fill="none" stroke="currentColor" 
@@ -65,13 +69,17 @@ const Navigation = ()=> {
                 <nav className={na.categoryMobile}>
                     {[
                         {path:"/", label: "Home"},
-                        {path:"app/features", label: "Features"},
-                        {path:"app/testimonials", label: "Testimonials"},
-                        {path:"app/pricing", label: "Pricing"},
-                        {path:"app/f&q", label: "F&Q"},
+                        {path:"/app/features", label: "Features"},
+                        /* {path:"/app/testimonials", label: "Testimonials"}, */
+                        {path:"/app/pricing", label: "Pricing"},
+                        {path:"/app/f&q", label: "F&Q"},
                     ].map((item) => {
                         return <Link  to={item.path} className={na.itemMobile}>{item.label}</Link>
                     })}
+                    <SignedIn>
+                        {/* <Link to="/dashboard" className={na.itemMobile}>Dashboard</Link> */}
+                        <Link to="/history" className={na.itemMobile}>History</Link>
+                    </SignedIn>
                 </nav>
                 <div className={na.signOMobile}>
                     
