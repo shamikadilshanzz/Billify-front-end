@@ -7,6 +7,8 @@ const PricePage = () => {
         <div>
             <Navigation/>
             <Pricing/>
+            <br></br>
+            <br></br>
             <Footer className={styles.footer}/>
         </div>
     )

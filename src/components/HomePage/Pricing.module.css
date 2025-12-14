@@ -1,21 +1,204 @@
 .pricing{
-    padding: 50px 150px;
+    padding: -100px 150px;
     display: grid;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 50px;
+    text-align: center;
+}
+.titleNam{
+    font-size: 50px;
+}
+.slogan{
+    margin-top: -20px;
 }
 .first{
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 50px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+   
+}
+.pricingContainer{
+    display: flex;
+    gap: 20px;
+    
+}.firstPlan{
+    display: grid;
+    text-align: left;
+    line-height: 18px;
+    justify-content: left;
+    padding: 10px 25px ;
+    width: 300px;
+    height: auto;
+    background-color: white;
+    border-radius: 35px;
+    color: black; 
+}
+.sub{
+    color: rgb(83, 83, 83);
+    margin-top: -10px;
+}
+.title{
+    color: black;
+    font-size: 30px;
 }
 .second{
     display: grid;
 }
-.third{
+.price{
+    color: black;
+    display: flex;
+    margin-top: -10px;
+}
+.currency{
+    font-size: 30px;
+}
+.value{
+    font-size: 60px;
+    margin-top: 30px;
+}
+.forWhat{
+    font-size: 20px;
+    margin-top: 45px;
+}
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.0001ms;
+}
+.btn:hover{
+    background-color: rgb(17, 17, 17);
+    transform: scale(1.005);
+}
+.great{
+    display: flex;
+}
+.greatNa{
+    font-size: 20px;
+    color: black;
+}
+.lucArrow{
+    margin-top: 14px;
+    margin-left: 20px;
+}
+.greatPara{
+    color: black;
+    margin-top: -10px;
+}
+.itemCat{
+    font-size: 20px;
+    color: black;
+}
+.char{
+    display: flex;
+    margin-top: 2px;
+}
+.charIt{
+    margin-top: 0px;
+    margin-left: 20px;
+}
+ 
+.secondPlan{
     display: grid;
+    text-align: left;
+    line-height: 18px;
+    justify-content: left;
+    padding: 10px 25px ;
+    width: 300px;
+    height: auto;
+    background-color:#bd32f8;
+    border-radius: 35px;
+    color: rgb(255, 255, 255); 
+}
+.sub2{
+    color: rgb(255, 255, 255);
+    margin-top: -10px;
+}
+.title2{
+    color: rgb(255, 255, 255);
+    font-size: 30px;
+}
+.second2{
+    display: grid;
+}
+.price2{
+    color: black;
+    display: flex;
+    margin-top: -10px;
+}
+.currency2{
+    font-size: 30px;
+}
+.value2{
+    font-size: 60px;
+    margin-top: 30px;
+}
+.forWhat2{
+    font-size: 20px;
+    margin-top: 45px;
+}
+.btn2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.0001ms;
+}
+.btn2:hover{
+    background-color: rgb(241, 241, 241);
+    transform: scale(1.005);
+}
+.great2{
+    display: flex;
+}
+.greatNa2{
+    font-size: 20px;
+    color: rgb(247, 247, 247);
+}
+.lucArrow2{
+    margin-top: 14px;
+    margin-left: 20px;
+    color: white;
+}
+.greatPara2{
+    color: rgb(241, 241, 241);
+    margin-top: -10px;
+}
+.itemCat2{
+    font-size: 20px;
+    color: black;
+}
+.char2{
+    display: flex;
+    margin-top: 2px;
+}
+.charIt2{
+    margin-top: 0px;
+    margin-left: 20px;
+}
+
+@media (max-width:430px) {
+    .pricingContainer{
+        display: grid;
+        padding: 20px ;
+        width: 100%;
+        
+    } 
 }

@@ -43,6 +43,8 @@
 .sub{
     transition: 0.3s;
     font-weight: 400;
+    text-decoration: none;
+    color: #ffffff;
 }
 .sub:hover{
     color: #A700ED;

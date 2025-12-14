@@ -1,0 +1,93 @@
+/* Calendar container */
+:global(.react-datepicker) {
+    font-family: Inter, system-ui, sans-serif;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Header */
+  :global(.react-datepicker__header) {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px;
+  }
+  
+  /* Month text */
+  :global(.react-datepicker__current-month) {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  
+  /* Day names */
+  :global(.react-datepicker__day-name) {
+    color: #6b7280;
+    font-size: 12px;
+    width: 36px;
+  }
+  
+  /* Day cells */
+  :global(.react-datepicker__day) {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Hover */
+  :global(.react-datepicker__day:hover) {
+    background-color: #e5e7eb;
+  }
+  
+  /* Selected date */
+  :global(.react-datepicker__day--selected) {
+    background-color: #A700ED;
+    color: #ffffff;
+  }
+  
+  /* Today */
+  :global(.react-datepicker__day--today) {
+    border: 1px solid #A700ED;
+    font-weight: 600;
+  }
+  
+  /* Disabled */
+  :global(.react-datepicker__day--disabled) {
+    color: #d1d5db;
+  }
+  
+  /* Navigation arrows */
+  :global(.react-datepicker__navigation-icon::before) {
+    border-color: #374151;
+  }
+  
+  /* Input */
+  :global(.react-datepicker__input-container input) {
+    width: 160px;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  /* Input focus */
+  :global(.react-datepicker__input-container input:focus) {
+    outline: none;
+    border-color: #A700ED;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+  
+  /* Today button */
+  :global(.react-datepicker__today-button) {
+    background: #f3f4f6;
+    border-top: 1px solid #e5e7eb;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #A700ED;
+  }
+  

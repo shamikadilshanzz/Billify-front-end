@@ -1,5 +1,6 @@
 import React from 'react'
 import fo from '../HomePage/Footer.module.css'
+import { Link } from "react-router"
 export default function Footer({ className }) {
   return (
     <div className={`${fo.main} ${className || ''}`}>
@@ -18,7 +19,7 @@ export default function Footer({ className }) {
             <div className={fo.twoSe}>
                 <h2 className={fo.head}>PRODUCT</h2>
                 <h3 className={fo.sub}>Features</h3>
-                <h3 className={fo.sub}>Pricing</h3>
+                <Link to={'/app/pricing'} className={fo.sub}>Pricing</Link>
                 <h3 className={fo.sub}>Templates</h3>
                 <h3 className={fo.sub}>Integrations</h3>
             </div>

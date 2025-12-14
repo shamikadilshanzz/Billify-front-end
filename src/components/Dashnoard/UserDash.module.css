@@ -79,7 +79,7 @@
 
 /* Invoice Container */
 .invoiceContainer {
-  background-color: rgba(0, 0, 0, 0.52);
+  background-color: rgba(0, 0, 0);
   border-radius: 16px;
   padding: 30px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -444,6 +444,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
+  color: #ffffff;
   font-size: 16px;
 }
 
@@ -685,6 +686,395 @@
 
 .toggleHandleOn {
   left: 27px;
+}
+/* Payment Scheduling Styles - Add to userDash.module.css */
+
+/* Edit Mode Styles */
+.paymentSchedulingEdit {
+  margin-top: 30px;
+  padding: 20px;
+  color: #000000;
+  background: #000000;
+  border-radius: 12px;
+}
+.inputPa {
+  width: 80%;
+  padding: 12px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(167, 0, 237, 0.3);
+  border-radius: 8px;
+  color: #000000;
+  font-size: 14px;
+  outline: none;
+}
+.paymentSummaryBox {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summaryRowBold {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.upcomingPaymentsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sectionSubtitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #eeeeee;
+}
+
+.paymentActions {
+  display: flex;
+  gap: 10px;
+}
+
+.depositButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.depositButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.addPaymentButton {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.addPaymentButton:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.upcomingPaymentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upcomingPaymentCard {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+}
+
+.upcomingPaymentCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.paymentCardContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paymentDescription {
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.paymentDueDate {
+  font-size: 13px;
+  color: #999;
+}
+
+.paymentCardRight {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.paymentAmount {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.paymentEditBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.paymentEditBtn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* Preview Mode Styles */
+.paymentSchedulingPreview {
+  margin-top: 30px;
+}
+
+.paymentSummary {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.upcomingPaymentsSection {
+  margin-top: 20px;
+}
+
+.upcomingPaymentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.balanceRemaining {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modalHeader h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.modalClose:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modalBody {
+  padding: 24px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.formGroup small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #999;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 20px 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.cancelBtn {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelBtn:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.saveBtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saveBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.deletePaymentBtn {
+  padding: 10px 20px;
+  border: 1px solid #ff4444;
+  border-radius: 6px;
+  background: white;
+  color: #ff4444;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: auto;
+}
+
+.deletePaymentBtn:hover {
+  background: #ff4444;
+  color: white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 430px) {
+  .paymentSchedulingEdit {
+    padding: 15px;
+  }
+
+  .paymentActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .depositButton,
+  .addPaymentButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .upcomingPaymentsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .paymentCardContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .paymentCardRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .modalContent {
+    width: 95%;
+    margin: 10px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .deletePaymentBtn {
+    margin-right: 0;
+    order: 3;
+  }
 }
 
 @media (max-width: 430px) {

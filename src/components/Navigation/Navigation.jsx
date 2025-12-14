@@ -24,7 +24,7 @@ const Navigation = ()=> {
                 <nav className={na.category}>
                     {[
                         {path:"/", label: "Home"},
-                        {path:"/app/features", label: "Features"},
+                        /*{path:"/app/features", label: "Features"},*/
                         /* {path:"/app/testimonials", label: "Testimonials"}, */
                         {path:"/app/pricing", label: "Pricing"},
                         {path:"/app/f&q", label: "F&Q"},
@@ -69,7 +69,7 @@ const Navigation = ()=> {
                 <nav className={na.categoryMobile}>
                     {[
                         {path:"/", label: "Home"},
-                        {path:"/app/features", label: "Features"},
+                        /*{path:"/app/features", label: "Features"},*/
                         /* {path:"/app/testimonials", label: "Testimonials"}, */
                         {path:"/app/pricing", label: "Pricing"},
                         {path:"/app/f&q", label: "F&Q"},
