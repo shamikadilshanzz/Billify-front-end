@@ -106,7 +106,7 @@ export default function PaymentScheduling({
     // Preview Mode - Show summary
     return (
       <div className={styles.paymentSchedulingPreview}>
-        <div className={styles.paymentSummary}>
+        {/* <div className={styles.paymentSummary}>
           <div className={styles.summaryRow}>
             <span>Invoice Total:</span>
             <span>Rs.{invoiceTotal.toFixed(2)}</span>
@@ -123,7 +123,7 @@ export default function PaymentScheduling({
             <span>Balance Due:</span>
             <span>LKR Rs.{balanceDue.toFixed(2)}</span>
           </div>
-        </div>
+        </div> */}
 
         {upcomingPayments.length > 0 && (
           <div className={styles.upcomingPaymentsSection}>
@@ -139,10 +139,16 @@ export default function PaymentScheduling({
                 <div className={styles.paymentAmount}>Rs.{parseFloat(payment.amount).toFixed(2)}</div>
               </div>
             ))}
-            <div className={styles.balanceRemaining}>
-              <span>BALANCE REMAINING</span>
-              <span style={{ color: selectedColor }}>Rs.{amountRemaining.toFixed(2)}</span>
+            <div
+              className={styles.balanceRemaining}
+              style={{ backgroundColor: selectedColor }}
+            >
+              <span className={styles.label}>Balance Remaining: </span>
+              <span className={styles.amount}>
+                Rs. {amountRemaining.toFixed(2)}
+              </span>
             </div>
+
           </div>
         )}
       </div>
@@ -261,7 +267,6 @@ export default function PaymentScheduling({
                   onChange={(date) => setPaymentDate(date)}
                   dateFormat="MMM dd, yyyy"
                   className={styles.inputPa}
-                  minDate={new Date()}
                 />
               </div>
 

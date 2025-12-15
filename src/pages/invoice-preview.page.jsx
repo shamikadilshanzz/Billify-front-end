@@ -81,6 +81,7 @@ export default function InvoicePreviewPage() {
         return `<h2 style="color:${selectedColor || '#A700ED'}">Upcoming Payments Pending</h2>`;
       }
     };
+    
     const html = `
       <!DOCTYPE html>
       <html>
@@ -141,7 +142,7 @@ export default function InvoicePreviewPage() {
         .logo {
           max-width: 120px;
           border-radius: 8px;
-          box-shadow: 0px 0px 10px black
+          box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.37);
         }
 
         .section-title {
@@ -337,6 +338,7 @@ export default function InvoicePreviewPage() {
           border-radius: 6px;
           border: 1px solid #ddd;
         }
+          
         @page {
           margin: 0;
         }
@@ -453,24 +455,7 @@ export default function InvoicePreviewPage() {
               </div>
             </div>
           </div>
-          <table class="items-tableM">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${(upcomingItems || []).map(item => `
-                <tr>
-                  <td>
-                    <div class="item-descriptionM">${item.desc || ''}</div>
-                  </td>
-                  <td>${(parseFloat(item.price) || 0).toFixed(2)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+          
 
           
           

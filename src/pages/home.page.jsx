@@ -16,7 +16,7 @@ const HomePage = () => {
             <Powerful/>
             <Reviews/>
             <FAQS/>
-            <MyCalendar/>
+            {/* <MyCalendar/> */}
             <Footer className={styles.footer}/>
             
             

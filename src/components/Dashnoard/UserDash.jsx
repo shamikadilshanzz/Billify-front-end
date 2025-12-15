@@ -161,6 +161,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
 
     return (
       <div style={{
+        width: '600px',
         maxWidth: '900px',
         margin: '0 auto',
         background: '#fff',
@@ -197,7 +198,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
             <img src={logoImage} alt="Logo" style={{
               maxWidth: '120px',
               borderRadius: '8px',
-              boxShadow: '0px 0px 10px black'
+              boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.37)',
             }} />
           )}
         </div>
@@ -538,7 +539,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
               activeTab={activeTab}
               formData={formData}
               updateFormData={updateFormData}
-              logoImage={logoImage}
+              logoImage={logoImage} 
               logoInputRef={logoInputRef}
               handleLogoUpload={handleLogoUpload}
               selectedColor={selectedColor}
