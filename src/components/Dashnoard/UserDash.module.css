@@ -30,7 +30,7 @@
 }
 
 .navTabsMobile {
-  gap: 5px;
+  gap: 20px;
   padding: 5px;
   flex-wrap: wrap;
 }

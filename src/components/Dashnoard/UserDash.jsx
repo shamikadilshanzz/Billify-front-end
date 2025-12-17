@@ -1,7 +1,7 @@
 // src/components/UserDash/UserDash.jsx
 
 import React, { useRef } from 'react';
-import { Download, Edit2, Eye } from 'lucide-react';
+import { Download, Edit2, Eye, Save } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
 import styles from './userDash.module.css';
 
@@ -88,9 +88,10 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
   const handleSave = async () => {
     if (!user) {
       console.error('User not authenticated');
+      alert('You must be logged in to save.');
       return;
     }
-
+  
     const data = {
       activeTab,
       selectedColor,
@@ -108,14 +109,15 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
       formData,
       upcomingPayments
     };
-
+  
     try {
       if (invoiceId) {
-        await updateInvoice(invoiceId, data);
+        await updateInvoice(invoiceId, data, user.id); // Pass userId
         console.log('Invoice updated successfully!');
       } else {
-        await saveInvoice(data, user.id);
+        const savedInvoice = await saveInvoice(data, user.id);
         console.log('Invoice saved successfully!');
+        // Optionally update the invoiceId in state or redirect
       }
       if (onSaveComplete) {
         onSaveComplete();
@@ -126,8 +128,8 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
     }
   };
 
-  const handleDownloadAndSave = async () => {
-    await handleSave();
+  const handleDownloadPDF = async () => {
+    //await handleSave();
     const html = generatePDFHTML({
       selectedColor,
       formData,
@@ -516,10 +518,17 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
         </button>
         <button
           className={`${styles.tabButton} ${IS_MOBILE ? styles.tabButtonMobile : ''}`}
-          onClick={handleDownloadAndSave}
+          onClick={handleDownloadPDF}
         >
           <Download color="white" size={IS_MOBILE ? 14 : 18} />
           {IS_MOBILE ? 'PDF' : 'Download PDF'}
+        </button>
+        <button
+          className={`${styles.tabButton} ${IS_MOBILE ? styles.tabButtonMobile : ''}`}
+          onClick={handleSave}
+        >
+          <Save color="white" size={IS_MOBILE ? 14 : 18} />
+          {IS_MOBILE ? 'PDF' : 'Save PDF'}
         </button>
       </div>
 

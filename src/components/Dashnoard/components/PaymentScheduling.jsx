@@ -1,9 +1,9 @@
 // src/components/UserDash/components/PaymentScheduling.jsx
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import styles from '../userDash.module.css';
+import styles from "../userDash.module.css";
 
 export default function PaymentScheduling({
   activeTab,
@@ -18,30 +18,55 @@ export default function PaymentScheduling({
 }) {
   const [showModal, setShowModal] = useState(false);
   const [editingPayment, setEditingPayment] = useState(null);
-  const [paymentAmount, setPaymentAmount] = useState('');
+  const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentDate, setPaymentDate] = useState(new Date());
-  const [paymentDescription, setPaymentDescription] = useState('');
+  const [paymentDescription, setPaymentDescription] = useState("");
 
-  // Calculate totals
+  /* ================= CALCULATIONS ================= */
   const invoiceTotal = parseFloat(packagePrice || 0);
   const paid = parseFloat(total || 0);
-  const upcomingTotal = upcomingPayments.reduce((sum, payment) => 
-    sum + parseFloat(payment.amount || 0), 0
-  );
-  const amountRemaining = invoiceTotal - paid - upcomingTotal;
-  const balanceDue = parseFloat(total || 0);
 
+  const upcomingTotal = upcomingPayments.reduce(
+    (sum, payment) => sum + parseFloat(payment.amount || 0),
+    0
+  );
+
+  const amountRemaining = invoiceTotal - paid - upcomingTotal;
+  const balanceDue = paid;
+
+  /* ================= HELPERS ================= */
   const formatDate = (date) => {
-    if (!date) return '';
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    if (!date) return "";
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
   };
 
+  /* ================= STATUS COMPONENT ================= */
+  const StatusRemaining = () => {
+    if (amountRemaining <= 0) return null;
+
+    return (
+      <div
+        className={styles.balanceRemaining}
+        style={{ backgroundColor: selectedColor }}
+      >
+        <span className={styles.label}>Balance Remaining:</span>
+        <span className={styles.amount}>
+          Rs. {amountRemaining.toFixed(2)}
+        </span>
+      </div>
+    );
+  };
+
+  /* ================= HANDLERS ================= */
   const handleAddPayment = () => {
     setEditingPayment(null);
-    setPaymentAmount('');
+    setPaymentAmount("");
     setPaymentDate(new Date());
-    setPaymentDescription('Payment');
+    setPaymentDescription("Payment");
     setShowModal(true);
   };
 
@@ -49,27 +74,32 @@ export default function PaymentScheduling({
     setEditingPayment(payment);
     setPaymentAmount(payment.amount);
     setPaymentDate(new Date(payment.dueDate));
-    setPaymentDescription(payment.description || 'Payment');
+    setPaymentDescription(payment.description || "Payment");
     setShowModal(true);
   };
 
   const handleSavePayment = () => {
     const amount = parseFloat(paymentAmount);
+
     if (!amount || amount <= 0) {
-      alert('Please enter a valid amount');
+      alert("Please enter a valid amount");
       return;
     }
 
-    if (amount > amountRemaining && !editingPayment) {
-      alert(`Amount cannot exceed remaining balance of Rs.${amountRemaining.toFixed(2)}`);
+    if (!editingPayment && amount > amountRemaining) {
+      alert(
+        `Amount cannot exceed remaining balance of Rs.${amountRemaining.toFixed(
+          2
+        )}`
+      );
       return;
     }
 
     const paymentData = {
       id: editingPayment?.id || Date.now(),
-      amount: amount,
+      amount,
       dueDate: formatDate(paymentDate),
-      description: paymentDescription || 'Payment'
+      description: paymentDescription || "Payment"
     };
 
     if (editingPayment) {
@@ -79,86 +109,72 @@ export default function PaymentScheduling({
     }
 
     setShowModal(false);
-    setPaymentAmount('');
+    setPaymentAmount("");
     setPaymentDate(new Date());
-    setPaymentDescription('');
+    setPaymentDescription("");
   };
 
   const handleRequestDeposit = () => {
-    // Calculate remaining after balance due
-    const depositAmount = amountRemaining;
-    if (depositAmount <= 0) {
-      alert('No remaining amount available for deposit');
+    if (amountRemaining <= 0) {
+      alert("No remaining amount available for deposit");
       return;
     }
 
-    const paymentData = {
+    addUpcomingPayment({
       id: Date.now(),
-      amount: depositAmount,
+      amount: amountRemaining,
       dueDate: formatDate(new Date()),
-      description: 'Deposit'
-    };
-
-    addUpcomingPayment(paymentData);
+      description: "Deposit"
+    });
   };
 
-  if (activeTab === 'Preview') {
-    // Preview Mode - Show summary
+  /* ================= PREVIEW MODE ================= */
+  if (activeTab === "Preview") {
     return (
       <div className={styles.paymentSchedulingPreview}>
-        {/* <div className={styles.paymentSummary}>
-          <div className={styles.summaryRow}>
-            <span>Invoice Total:</span>
-            <span>Rs.{invoiceTotal.toFixed(2)}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Paid:</span>
-            <span>Rs.{paid.toFixed(2)}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Amount Remaining:</span>
-            <span>Rs.{amountRemaining.toFixed(2)}</span>
-          </div>
-          <div className={styles.summaryRowBold} style={{ color: selectedColor }}>
-            <span>Balance Due:</span>
-            <span>LKR Rs.{balanceDue.toFixed(2)}</span>
-          </div>
-        </div> */}
-
         {upcomingPayments.length > 0 && (
           <div className={styles.upcomingPaymentsSection}>
-            <h4 className={styles.sectionSubtitle} style={{ color: selectedColor }}>
+            <h4
+              className={styles.sectionSubtitle}
+              style={{ color: selectedColor }}
+            >
               UPCOMING PAYMENTS
             </h4>
-            {upcomingPayments.map(payment => (
-              <div key={payment.id} className={styles.upcomingPaymentItem}>
+
+            {upcomingPayments.map((payment) => (
+              <div
+                key={payment.id}
+                className={styles.upcomingPaymentItem}
+              >
                 <div>
-                  <div className={styles.paymentDescription}>{payment.description}</div>
-                  <div className={styles.paymentDueDate}>Due {payment.dueDate}</div>
+                  <div className={styles.paymentDescription}>
+                    {payment.description}
+                  </div>
+                  <div className={styles.paymentDueDate}>
+                    Due {payment.dueDate}
+                  </div>
                 </div>
-                <div className={styles.paymentAmount}>Rs.{parseFloat(payment.amount).toFixed(2)}</div>
+                <div className={styles.paymentAmount}>
+                  Rs.{parseFloat(payment.amount).toFixed(2)}
+                </div>
               </div>
             ))}
-            <div
-              className={styles.balanceRemaining}
-              style={{ backgroundColor: selectedColor }}
-            >
-              <span className={styles.label}>Balance Remaining: </span>
-              <span className={styles.amount}>
-                Rs. {amountRemaining.toFixed(2)}
-              </span>
-            </div>
 
+            {/* ✅ CORRECT */}
+            <StatusRemaining />
           </div>
         )}
       </div>
     );
   }
 
-  // Edit Mode - Show full scheduling interface
+  /* ================= EDIT MODE ================= */
   return (
     <div className={styles.paymentSchedulingEdit}>
-      <h3 className={styles.sectionTitle} style={{ color: selectedColor }}>
+      <h3
+        className={styles.sectionTitle}
+        style={{ color: selectedColor }}
+      >
         Payment Scheduling
       </h3>
 
@@ -175,23 +191,26 @@ export default function PaymentScheduling({
           <span>Amount Remaining</span>
           <span>Rs.{amountRemaining.toFixed(2)}</span>
         </div>
-        <div className={styles.summaryRowBold} style={{ color: selectedColor }}>
+        <div
+          className={styles.summaryRowBold}
+          style={{ color: selectedColor }}
+        >
           <span>Balance Due</span>
-          <span>LKR Rs.{balanceDue.toFixed(2)}</span>
+          <span>Rs.{balanceDue.toFixed(2)}</span>
         </div>
       </div>
 
       <div className={styles.upcomingPaymentsHeader}>
         <h4 className={styles.sectionSubtitle}>Upcoming Payments</h4>
         <div className={styles.paymentActions}>
-          <button 
+          <button
             onClick={handleRequestDeposit}
             className={styles.depositButton}
             style={{ background: selectedColor }}
           >
             Request Deposit
           </button>
-          <button 
+          <button
             onClick={handleAddPayment}
             className={styles.addPaymentButton}
           >
@@ -202,16 +221,25 @@ export default function PaymentScheduling({
 
       {upcomingPayments.length > 0 && (
         <div className={styles.upcomingPaymentsList}>
-          {upcomingPayments.map(payment => (
-            <div key={payment.id} className={styles.upcomingPaymentCard}>
+          {upcomingPayments.map((payment) => (
+            <div
+              key={payment.id}
+              className={styles.upcomingPaymentCard}
+            >
               <div className={styles.paymentCardContent}>
                 <div>
-                  <div className={styles.paymentDescription}>{payment.description}</div>
-                  <div className={styles.paymentDueDate}>Due {payment.dueDate}</div>
+                  <div className={styles.paymentDescription}>
+                    {payment.description}
+                  </div>
+                  <div className={styles.paymentDueDate}>
+                    Due {payment.dueDate}
+                  </div>
                 </div>
                 <div className={styles.paymentCardRight}>
-                  <div className={styles.paymentAmount}>Rs.{parseFloat(payment.amount).toFixed(2)}</div>
-                  <button 
+                  <div className={styles.paymentAmount}>
+                    Rs.{parseFloat(payment.amount).toFixed(2)}
+                  </div>
+                  <button
                     onClick={() => handleEditPayment(payment)}
                     className={styles.paymentEditBtn}
                   >
@@ -224,13 +252,26 @@ export default function PaymentScheduling({
         </div>
       )}
 
-      {/* Modal for Add/Edit Payment */}
+      {/* ================= MODAL ================= */}
       {showModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.modalHeader}>
-              <h3>{editingPayment ? 'Edit Payment' : 'Add Upcoming Payment'}</h3>
-              <button onClick={() => setShowModal(false)} className={styles.modalClose}>×</button>
+              <h3>
+                {editingPayment ? "Edit Payment" : "Add Upcoming Payment"}
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className={styles.modalClose}
+              >
+                ×
+              </button>
             </div>
 
             <div className={styles.modalBody}>
@@ -239,8 +280,9 @@ export default function PaymentScheduling({
                 <input
                   type="text"
                   value={paymentDescription}
-                  onChange={(e) => setPaymentDescription(e.target.value)}
-                  placeholder="Payment description"
+                  onChange={(e) =>
+                    setPaymentDescription(e.target.value)
+                  }
                   className={styles.inputPa}
                 />
               </div>
@@ -251,12 +293,13 @@ export default function PaymentScheduling({
                   type="number"
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(e.target.value)}
-                  placeholder="0.00"
-                  className={styles.inputPa}
                   step="0.01"
+                  className={styles.inputPa}
                 />
                 {!editingPayment && (
-                  <small>Available: Rs.{amountRemaining.toFixed(2)}</small>
+                  <small>
+                    Available: Rs.{amountRemaining.toFixed(2)}
+                  </small>
                 )}
               </div>
 
@@ -282,15 +325,18 @@ export default function PaymentScheduling({
                     Delete Payment
                   </button>
                 )}
-                <button onClick={() => setShowModal(false)} className={styles.cancelBtn}>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className={styles.cancelBtn}
+                >
                   Cancel
                 </button>
-                <button 
-                  onClick={handleSavePayment} 
+                <button
+                  onClick={handleSavePayment}
                   className={styles.saveBtn}
                   style={{ background: selectedColor }}
                 >
-                  {editingPayment ? 'Update' : 'Add'} Payment
+                  {editingPayment ? "Update" : "Add"} Payment
                 </button>
               </div>
             </div>

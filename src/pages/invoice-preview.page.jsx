@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router';
 import { useUser } from '@clerk/clerk-react';
 import Navigation from '../components/Navigation/Navigation';
 import Footer from '../components/HomePage/Footer';
+import PaymentScheduling from '../components/Dashnoard/components/PaymentScheduling';
+import { IS_MOBILE } from '../components/Dashnoard/utils/constants';
 import { getInvoiceById } from '../services/invoiceService';
 import { Edit2, ArrowLeft, Download } from 'lucide-react';
 import styles from './invoice-preview.module.css';
@@ -58,7 +60,7 @@ export default function InvoicePreviewPage() {
   };
 
   const generateInvoiceHTML = (invoiceData) => {
-    const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription, } = invoiceData;
+    const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription, upcomingPayments = [] } = invoiceData;
     
     const subtotal = (items || []).reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
     let discountPrice = 0;
@@ -71,15 +73,20 @@ export default function InvoicePreviewPage() {
     const balanceDue = total;
     const remainingBeforeUpcoming = parseFloat(packagePrice || 0) - parseFloat(total || 0);
     const upcomingTotal = (upcomingItems || []).reduce((s, it) => s + (parseFloat(it.price) || 0), 0);
+    const scheduledPaymentsTotal = (upcomingPayments || []).reduce((s, it) => s + (parseFloat(it.amount) || 0), 0);
     const remainingAfterUpcoming = parseFloat(packagePrice || 0) - parseFloat(total || 0) - parseFloat(upcomingTotal || 0);
+    const paymentScheduleRemaining = parseFloat(packagePrice || 0) - parseFloat(total || 0) - parseFloat(scheduledPaymentsTotal || 0);
     
     // Status function matching UserDash.jsx
     const status = () => {
-      if (packagePrice !== 0 && remainingAfterUpcoming == 0) {
-        return `<h2 style="color:#7FFF00">Payment Successfully Complete</h2>`;
-      } else {
-        return `<h2 style="color:${selectedColor || '#A700ED'}">Upcoming Payments Pending</h2>`;
-      }
+      if (paymentScheduleRemaining === 0) return "";
+    
+      return `
+        <div class="payment-schedule-remaining">
+          <span>Balance Remaining</span>
+          <span>Rs. ${paymentScheduleRemaining.toFixed(2)}</span>
+        </div>
+      `;
     };
     
     const html = `
@@ -338,6 +345,62 @@ export default function InvoicePreviewPage() {
           border-radius: 6px;
           border: 1px solid #ddd;
         }
+
+        .payment-schedule-wrapper {
+          display: flex;
+          justify-content: flex-end;
+          width: 100%;
+        }
+
+        .payment-schedule {
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          width: 41%;
+          max-width: 520px;
+          margin-left: auto;
+        }
+
+        .payment-schedule-header {
+          color: ${selectedColor};
+          font-size: 14px;
+          margin: 0;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: .2px;
+        }
+
+        .payment-schedule-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          background: white;
+          border-radius: 8px;
+          margin-bottom: 10px;
+          border: 1px solid #e0e0e0;
+        }
+
+        .payment-schedule-item:last-child {
+          font-weight: 600;
+          font-size: 15px;
+          color: #333;
+          margin-bottom: 4px;
+        }
+
+        .payment-schedule-remaining {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: white;
+          padding: 15px;
+          border-radius: 8px;
+          margin-top: 0px;
+          font-weight: bold;
+          font-size: 15px;
+          background: ${selectedColor};
+        }
           
         @page {
           margin: 0;
@@ -455,11 +518,26 @@ export default function InvoicePreviewPage() {
               </div>
             </div>
           </div>
-          
 
+          ${(upcomingPayments || []).length > 0 ? `
+            <div class="payment-schedule-wrapper">
+              <div class="payment-schedule">
+                <h4 class="payment-schedule-header">Upcoming Payments</h4>
+                ${(upcomingPayments || []).map(p => `
+                  <div class="payment-schedule-item">
+                    <div>
+                      <div>${p.description || 'Payment'}</div>
+                      <div style="color:#666;font-size:12px;">Due ${p.dueDate || ''}</div>
+                    </div>
+                    <div>Rs. ${(parseFloat(p.amount)||0).toFixed(2)}</div>
+                  </div>
+                `).join('')}
+                ${status()}
+              </div>
+            </div>
+          ` : ''}
           
           
-          ${status()}
           ${formData?.notes ? `
             <div class="notes-section">
               <div class="section-title">Notes</div>
@@ -528,7 +606,7 @@ export default function InvoicePreviewPage() {
     );
   }
 
-  const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription } = invoice;
+  const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription, upcomingPayments = [] } = invoice;
   
   const subtotal = (items || []).reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
   let discountPrice = 0;
@@ -655,6 +733,22 @@ export default function InvoicePreviewPage() {
             <div className={styles.summaryTotal} style={{ backgroundColor: selectedColor || '#A700ED', color: 'white'}}>
               <span>Balance Due:</span>
               <span>Rs. {total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+            <div style={{ width: '80%', marginLeft: '50px'}}>
+              <PaymentScheduling
+                activeTab="Preview"
+                total={total}
+                packagePrice={packagePrice}
+                upcomingPayments={upcomingPayments}
+                addUpcomingPayment={() => {}}
+                updateUpcomingPayment={() => {}}
+                deleteUpcomingPayment={() => {}}
+                selectedColor={selectedColor || '#A700ED'}
+                isMobile={IS_MOBILE}
+              />
             </div>
           </div>
 
