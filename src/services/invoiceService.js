@@ -9,8 +9,8 @@ import {
   getDoc,
   deleteDoc
 } from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { firestore, storage } from '../infrastructure/db/firebaseConfig';
+import { firestore } from '../infrastructure/db/firebaseConfig';
+import { uploadToR2, compressBase64Image } from './r2Service';
 
 // Helper function to upload a single image
 const uploadSingleImage = async (base64Image, path) => {
@@ -19,23 +19,20 @@ const uploadSingleImage = async (base64Image, path) => {
     return null;
   }
   
-  // Check if it's a base64 string or already a URL
+  // Check if it's already a URL
   if (!base64Image.startsWith('data:')) {
     console.log('Image is already a URL:', base64Image.substring(0, 50) + '...');
-    return base64Image; // Already uploaded, return as-is
+    return base64Image;
   }
   
   try {
-    console.log(`Uploading image to ${path}...`);
-    const storageRef = ref(storage, path);
+    // Compress image before upload
+    console.log('Compressing image...');
+    const compressedImage = await compressBase64Image(base64Image, 1200, 0.85);
     
-    // Upload the base64 string
-    await uploadString(storageRef, base64Image, 'data_url');
-    
-    // Get the download URL
-    const downloadURL = await getDownloadURL(storageRef);
-    console.log(`Image uploaded successfully: ${downloadURL.substring(0, 50)}...`);
-    return downloadURL;
+    // Upload to R2
+    const url = await uploadToR2(compressedImage, path);
+    return url;
   } catch (error) {
     console.error(`Error uploading image to ${path}:`, error);
     throw error;
@@ -118,7 +115,7 @@ export const saveInvoice = async (invoiceData, userId) => {
     console.log('Document created with ID:', docRef.id);
     
     // Now upload images with the invoice ID
-    console.log('Uploading images...');
+    console.log('Uploading images to R2...');
     const uploadedData = await uploadInvoiceImages(invoiceData, docRef.id, userId);
     
     // Update the document with the image URLs
@@ -146,7 +143,6 @@ export const saveInvoice = async (invoiceData, userId) => {
     console.error('=== ERROR SAVING INVOICE ===');
     console.error('Error details:', error);
     console.error('Error message:', error.message);
-    console.error('Error code:', error.code);
     throw error;
   }
 };

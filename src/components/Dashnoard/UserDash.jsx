@@ -117,6 +117,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
       } else {
         const savedInvoice = await saveInvoice(data, user.id);
         console.log('Invoice saved successfully!');
+        window.alert("Invoice saved successfully!");
         // Optionally update the invoiceId in state or redirect
       }
       if (onSaveComplete) {
@@ -191,8 +192,9 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
             fontWeight: 'bold',
             color: 'white',
             letterSpacing: '3px',
-            marginTop: '-80px',
-            marginLeft: '50px'
+            marginTop: '-120px',
+            marginLeft: '30px',
+            fontFamily: "Cal Sans, sans-serif"
           }}>
             {formData.invoiceTitle || 'Invoice'}
           </div>
