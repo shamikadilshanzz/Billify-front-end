@@ -181,7 +181,40 @@
   
 }
 
-/* Sections */
+
+.sectionm{
+  display: grid;
+  gap: 10px;
+}
+.inputm{
+  width: 80%;
+  height: 30%;
+  padding: 12px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(167, 0, 237, 0.3);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  margin-top: 10px;
+
+}
+
+.formGrid{
+  display: grid;
+  margin-bottom: 30px;
+  width: 90%;
+}
+.fieldWrapper {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #b3b3b3;
+}
 .section {
   margin-bottom: 30px;
   width: 90%;
@@ -889,6 +922,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
+  color: white;
   border-radius: 8px;
   margin-top: 15px;
   font-weight: bold;
@@ -1036,6 +1070,21 @@
 
 /* Mobile Responsive */
 @media (max-width: 430px) {
+  .sectionm{
+    display: grid;
+  }
+  .inputm{
+    width: 80%;
+    height: 30%;
+    padding: 12px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(167, 0, 237, 0.3);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+  
+  }
   .paymentSchedulingEdit {
     padding: 15px;
   }
@@ -1201,7 +1250,12 @@
     align-items: center;
     justify-content: center;
   }
-
+  .paymentSchedulingPreview {
+    margin-top: 30px;
+    justify-content: right;
+    width: 100%;
+    margin-left: 10px;
+  }
   .addItemButton {
     font-size: 20px;
   }

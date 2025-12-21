@@ -16,6 +16,9 @@ export const useInvoiceData = (initialInvoiceData, invoiceId) => {
   const [upcomingItems, setUpcomingItems] = useState([DEFAULT_UPCOMING_ITEM]);
   const [upcomingError, setUpcomingError] = useState("");
   const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
+  const [packageName, setPackageName] = useState(
+    initialInvoiceData?.packageName || ''
+  );
   
   // Payment Scheduling State
   const [upcomingPayments, setUpcomingPayments] = useState([]);
@@ -123,6 +126,7 @@ export const useInvoiceData = (initialInvoiceData, invoiceId) => {
     discountType, setDiscountType,
     discountValue, setDiscountValue,
     packagePrice, setPackagePrice,
+    packageName, setPackageName,
     upcomingTitle, setUpcomingTitle,
     upcomingDescription, setUpcomingDescription,
     upcomingItems, addUpcomingItem, updateUpcomingItem, deleteUpcomingItem,

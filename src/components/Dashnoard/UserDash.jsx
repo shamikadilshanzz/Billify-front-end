@@ -53,6 +53,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
     discountType, setDiscountType,
     discountValue, setDiscountValue,
     packagePrice, setPackagePrice,
+    packageName, setPackageName,
     upcomingTitle,
     upcomingDescription,
     upcomingItems, addUpcomingItem, updateUpcomingItem, deleteUpcomingItem,
@@ -83,7 +84,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
   const upcomingTotal = calculateUpcomingTotal(upcomingItems);
   const remainingAfterUpcoming = calculateRemainingAfterUpcoming(packagePrice, balanceDue, upcomingTotal);
   const availableForUpcoming = calculateAvailableForUpcoming(remainingBeforeUpcoming);
-
+  
   // Handlers
   const handleSave = async () => {
     if (!user) {
@@ -107,6 +108,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
       discountValue,
       packagePrice,
       formData,
+      packageName,
       upcomingPayments
     };
   
@@ -144,6 +146,7 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
       balanceDue,
       upcomingItems,
       packagePrice,
+      packageName,
       remainingAfterUpcoming,
       signatureImage,
       photos,
@@ -269,9 +272,15 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
         </div>
 
         <br />
-        <div style={{ fontSize: '14px' }}>
-          <span style={{ fontWeight: 'bold', color: '#333' }}>Package Price:</span>{' '}
-          <span style={{ color: 'black', fontWeight: 'bold' }}>Rs. {parseFloat(packagePrice || 0).toFixed(2)}</span>
+        <div style={{display: 'flex', gap: '100px'}}>
+          <div style={{ fontSize: '14px' }}>
+            <span style={{ fontWeight: 'bold', color: '#333' }}>Package Price:</span>{' '}
+            <span style={{ color: 'black' }}>Rs. {parseFloat(packagePrice || 0).toFixed(2)}</span>
+          </div>
+          <div style={{ fontSize: '14px' }}>
+            <span style={{ fontWeight: 'bold', color: '#333' }}>Package Name:</span>{' '}
+            <span style={{ color: 'black' }}>{(packageName || 'none')}</span>
+          </div>
         </div>
 
         {/* Items Table */}
@@ -594,21 +603,35 @@ export default function UserDash({ invoiceId, invoiceData: initialInvoiceData, o
               isMobile={IS_MOBILE}
             />
 
-            <div className={styles.section}>
+            <div className={styles.sectionm}>
               <h3 className={styles.sectionTitle} style={{ color: selectedColor }}>
-                Package Price
+                Package Details
               </h3>
               <div className={styles.formGrid}>
-                <input
-                  type="number"
-                  placeholder="Full Package Price"
-                  className={styles.input}
-                  value={packagePrice}
-                  onChange={(e) => {
-                    const v = parseFloat(e.target.value);
-                    setPackagePrice(isNaN(v) ? 0 : v);
-                  }}
-                />
+                <div className={styles.fieldWrapper}>
+                  <label className={styles.fieldLabel}>Package Price</label>
+                  <input
+                    type="number"
+                    placeholder="Full Package Price"
+                    className={styles.inputm}
+                    value={packagePrice}
+                    onChange={(e) => {
+                      const v = parseFloat(e.target.value);
+                      setPackagePrice(isNaN(v) ? 0 : v);
+                    }}
+                  />
+                </div>
+                
+                <div className={styles.fieldWrapper}>
+                  <label className={styles.fieldLabel}>Package Name</label>
+                  <input
+                    type="text"
+                    className={styles.inputm}
+                    placeholder="Enter package name"
+                    value={packageName}
+                    onChange={(e) => setPackageName(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
 

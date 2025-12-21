@@ -13,14 +13,15 @@ export const generatePDFHTML = ({
   balanceDue,
   upcomingPayments = [],
   packagePrice,
+  packageName,
   signatureImage,
   photos
 }) => {
-  // Calculate payment schedule remaining
+  
   const scheduledPaymentsTotal = (upcomingPayments || []).reduce((s, it) => s + (parseFloat(it.amount) || 0), 0);
   const paymentScheduleRemaining = parseFloat(packagePrice || 0) - parseFloat(total || 0) - parseFloat(scheduledPaymentsTotal || 0);
   
-  // Status function matching InvoicePreviewPage
+  
   const status = () => {
     if (paymentScheduleRemaining === 0) return "";
   
@@ -130,14 +131,17 @@ export const generatePDFHTML = ({
         font-weight: bold;
         color: #333;
       }
+      .sec-main{
+        display: flex;
+        gap: 200px;
+      }
 
       .detail-value {
         color: #555;
       }
 
       .package-value {
-        color: black;
-        font-weight: bold;          
+        color: black;          
       }
 
       .items-table {
@@ -372,9 +376,15 @@ export const generatePDFHTML = ({
           </div>
         </div>
         <br/>
-        <div class="detail-item">
-          <span class="detail-label">Package Price:</span>
-          <span class="package-value">Rs. ${parseFloat(packagePrice || 0).toFixed(2)}</span>
+        <div class="sec-main">
+          <div class="detail-item">
+            <span class="detail-label">Package Price:</span>
+            <span class="package-value">Rs. ${parseFloat(packagePrice || 0).toFixed(2)}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Package Name:</span>
+            <span class="package-value">${(packageName || 'none')}</span>
+          </div>
         </div>
         
         <table class="items-table">

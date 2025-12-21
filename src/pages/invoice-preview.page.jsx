@@ -60,7 +60,21 @@ export default function InvoicePreviewPage() {
   };
 
   const generateInvoiceHTML = (invoiceData) => {
-    const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription, upcomingPayments = [] } = invoiceData;
+    const {
+      formData, 
+      items, 
+      selectedColor, 
+      logoImage, 
+      signatureImage, 
+      photos, 
+      discountType, 
+      discountValue, 
+      packagePrice, 
+      packageName = '',
+      upcomingItems, 
+      upcomingTitle, 
+      upcomingDescription, 
+      upcomingPayments = [] } = invoiceData;
     
     const subtotal = (items || []).reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
     let discountPrice = 0;
@@ -187,7 +201,10 @@ export default function InvoicePreviewPage() {
           margin-top: 20px;
           padding: 15px 0;
         }
-
+        .sec-main{
+          display: flex;
+          gap: 200px;
+        }
         .detail-item {
           font-size: 14px;
         }
@@ -352,6 +369,7 @@ export default function InvoicePreviewPage() {
           width: 100%;
         }
 
+
         .payment-schedule {
           margin-top: 20px;
           display: flex;
@@ -467,10 +485,16 @@ export default function InvoicePreviewPage() {
             </div>
           </div>
           <br/>
+          <div class="sec-main">
           <div class="detail-item">
             <span class="detail-label">Package Price:</span>
             <span class="package-value">Rs. ${parseFloat(packagePrice || 0).toFixed(2)}</span>
           </div>
+          <div class="detail-item">
+            <span class="detail-label">Package Name:</span>
+            <span class="package-value">${(packageName || 'none')}</span>
+          </div>
+        </div>
           <table class="items-table">
             <thead>
               <tr>
@@ -606,7 +630,21 @@ export default function InvoicePreviewPage() {
     );
   }
 
-  const { formData, items, selectedColor, logoImage, signatureImage, photos, discountType, discountValue, packagePrice, upcomingItems, upcomingTitle, upcomingDescription, upcomingPayments = [] } = invoice;
+  const { 
+    formData, 
+    items, 
+    selectedColor, 
+    logoImage, 
+    signatureImage, 
+    photos, 
+    discountType, 
+    discountValue, 
+    packagePrice,
+    packageName, 
+    upcomingItems, 
+    upcomingTitle, 
+    upcomingDescription, 
+    upcomingPayments = [] } = invoice;
   
   const subtotal = (items || []).reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
   let discountPrice = 0;
@@ -683,14 +721,20 @@ export default function InvoicePreviewPage() {
               <span className={styles.metadataLabel}>Date:</span>
               <span className={styles.metadataValue}>{formData?.invoiceDate || ''}</span>
             </div>
-            <div>
-              <span className={styles.metadataLabel}>Terms:</span>
-              <span className={styles.metadataValue}>{formData?.terms || ''}</span>
+              <div>
+                <span className={styles.metadataLabel}>Terms:</span>
+                <span className={styles.metadataValue}>{formData?.terms || ''}</span>
+              </div>
             </div>
-          </div>
-        <div class={styles.packageMain}>
-            <span class="detail-label">Package Price: </span>
-            <span class={styles.packagePr}>Rs.{parseFloat(packagePrice || 0).toFixed(1)}</span>
+            <div className={styles.mainm}>
+            <div class={styles.packageMain}>
+              <span class="detail-label">Package Price: </span>
+              <span class={styles.packagePr}>Rs.{parseFloat(packagePrice || 0).toFixed(1)}</span>
+            </div>
+            <div class={styles.packageMain}>
+              <span class="detail-label">Package Name: </span>
+              <span className={styles.packagePr}>{packageName}</span>
+            </div>
           </div>
           <br/>
           <table className={styles.itemsTable} >

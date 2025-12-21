@@ -6,12 +6,18 @@ import styles from '../userDash.module.css';
 export default function InvoiceSection({ 
   title, 
   activeTab, 
-  formData, 
+  formData = {}, 
   updateFormData, 
   selectedColor, 
   isMobile,
-  fields // Array of field objects: [{ key, type, placeholder }]
+  fields = [] 
 }) {
+  
+
+  if (!fields || fields.length === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.section}>
       <h3 className={styles.sectionTitle} style={{ color: selectedColor }}>
@@ -24,7 +30,7 @@ export default function InvoiceSection({
             <input 
               key={field.key}
               type={field.type || 'text'}
-              value={formData[field.key]}
+              value={formData[field.key] || ''} // Add fallback
               onChange={(e) => updateFormData(field.key, e.target.value)}
               placeholder={field.placeholder}
               className={styles.input}

@@ -5,7 +5,10 @@
   print-color-adjust: exact;
   color: #333;
 }
-
+.mainm{
+  display: flex;
+  gap: 200px;
+}
 .header {
   display: flex;
   justify-content: space-between;

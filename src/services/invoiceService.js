@@ -10,22 +10,36 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 import { firestore } from '../infrastructure/db/firebaseConfig';
-import { uploadToR2, compressBase64Image } from './r2Service';
+import { uploadToR2, compressBase64Image, deleteFromR2 } from './r2Service';
 
-// Helper function to upload a single image
-const uploadSingleImage = async (base64Image, path) => {
+
+const uploadSingleImage = async (base64Image, path, oldUrl = null) => {
   if (!base64Image) {
     console.log('No image provided for path:', path);
     return null;
   }
   
-  // Check if it's already a URL
+  // Check if it's already a URL (unchanged image)
   if (!base64Image.startsWith('data:')) {
-    console.log('Image is already a URL:', base64Image.substring(0, 50) + '...');
+    console.log('Image is already a URL (unchanged):', base64Image.substring(0, 50) + '...');
     return base64Image;
   }
   
   try {
+    // If there's an old URL and we're uploading a new image, delete the old one first
+    if (oldUrl && oldUrl.startsWith('http')) {
+      try {
+        // Extract the path from the URL
+        const urlObj = new URL(oldUrl);
+        const oldPath = urlObj.pathname.substring(1); // Remove leading '/'
+        console.log('Deleting old image:', oldPath);
+        await deleteFromR2(oldPath);
+      } catch (deleteError) {
+        console.warn('Could not delete old image:', deleteError);
+        // Continue with upload even if delete fails
+      }
+    }
+    
     // Compress image before upload
     console.log('Compressing image...');
     const compressedImage = await compressBase64Image(base64Image, 1200, 0.85);
@@ -40,7 +54,7 @@ const uploadSingleImage = async (base64Image, path) => {
 };
 
 // Helper function to upload images
-const uploadInvoiceImages = async (invoiceData, invoiceId, userId) => {
+const uploadInvoiceImages = async (invoiceData, invoiceId, userId, existingInvoice = null) => {
   console.log('Starting image upload process...');
   const uploadedData = { ...invoiceData };
   
@@ -50,7 +64,8 @@ const uploadInvoiceImages = async (invoiceData, invoiceId, userId) => {
       console.log('Processing logo image...');
       uploadedData.logoImage = await uploadSingleImage(
         invoiceData.logoImage,
-        `invoices/${userId}/${invoiceId}/logo.jpg`
+        `invoices/${userId}/${invoiceId}/logo.jpg`,
+        existingInvoice?.logoImage
       );
     }
     
@@ -59,7 +74,8 @@ const uploadInvoiceImages = async (invoiceData, invoiceId, userId) => {
       console.log('Processing signature image...');
       uploadedData.signatureImage = await uploadSingleImage(
         invoiceData.signatureImage,
-        `invoices/${userId}/${invoiceId}/signature.jpg`
+        `invoices/${userId}/${invoiceId}/signature.jpg`,
+        existingInvoice?.signatureImage
       );
     }
     
@@ -69,9 +85,12 @@ const uploadInvoiceImages = async (invoiceData, invoiceId, userId) => {
       uploadedData.photos = await Promise.all(
         invoiceData.photos.map(async (photo, index) => {
           if (photo.url) {
+            // Find the corresponding old photo if it exists
+            const oldPhoto = existingInvoice?.photos?.find(p => p.id === photo.id);
             const uploadedUrl = await uploadSingleImage(
               photo.url,
-              `invoices/${userId}/${invoiceId}/photos/photo_${index}_${photo.id}.jpg`
+              `invoices/${userId}/${invoiceId}/photos/photo_${index}_${photo.id}.jpg`,
+              oldPhoto?.url
             );
             return { ...photo, url: uploadedUrl };
           }
@@ -153,9 +172,14 @@ export const updateInvoice = async (invoiceId, invoiceData, userId) => {
     console.log('=== UPDATING INVOICE ===');
     console.log('Invoice ID:', invoiceId);
     console.log('User ID:', userId);
+    console.log('Logo is base64?', invoiceData.logoImage?.startsWith('data:'));
+    console.log('Signature is base64?', invoiceData.signatureImage?.startsWith('data:'));
     
-    // Upload any new images
-    const uploadedData = await uploadInvoiceImages(invoiceData, invoiceId, userId);
+    // Get the existing invoice to handle old image cleanup
+    const existingInvoice = await getInvoiceById(invoiceId);
+    
+    // Upload any new images (will skip unchanged URLs and delete old images if new ones are uploaded)
+    const uploadedData = await uploadInvoiceImages(invoiceData, invoiceId, userId, existingInvoice);
     
     const invoiceRef = doc(firestore, 'invoices', invoiceId);
     await updateDoc(invoiceRef, {
@@ -164,6 +188,9 @@ export const updateInvoice = async (invoiceId, invoiceData, userId) => {
     });
     
     console.log('Invoice updated successfully!');
+    console.log('New logo URL:', uploadedData.logoImage?.substring(0, 50));
+    console.log('New signature URL:', uploadedData.signatureImage?.substring(0, 50));
+    
     return { id: invoiceId, ...uploadedData };
   } catch (error) {
     console.error('=== ERROR UPDATING INVOICE ===');
@@ -218,6 +245,50 @@ export const getInvoiceById = async (invoiceId) => {
 // Delete an invoice
 export const deleteInvoice = async (invoiceId) => {
   try {
+    // Get invoice to delete associated images
+    const invoice = await getInvoiceById(invoiceId);
+    
+    // Delete images from R2
+    const deletePromises = [];
+    
+    if (invoice.logoImage && invoice.logoImage.startsWith('http')) {
+      try {
+        const urlObj = new URL(invoice.logoImage);
+        const path = urlObj.pathname.substring(1);
+        deletePromises.push(deleteFromR2(path));
+      } catch (e) {
+        console.warn('Could not delete logo:', e);
+      }
+    }
+    
+    if (invoice.signatureImage && invoice.signatureImage.startsWith('http')) {
+      try {
+        const urlObj = new URL(invoice.signatureImage);
+        const path = urlObj.pathname.substring(1);
+        deletePromises.push(deleteFromR2(path));
+      } catch (e) {
+        console.warn('Could not delete signature:', e);
+      }
+    }
+    
+    if (invoice.photos && invoice.photos.length > 0) {
+      invoice.photos.forEach(photo => {
+        if (photo.url && photo.url.startsWith('http')) {
+          try {
+            const urlObj = new URL(photo.url);
+            const path = urlObj.pathname.substring(1);
+            deletePromises.push(deleteFromR2(path));
+          } catch (e) {
+            console.warn('Could not delete photo:', e);
+          }
+        }
+      });
+    }
+    
+    // Wait for all deletions (but don't fail if they error)
+    await Promise.allSettled(deletePromises);
+    
+    // Delete the Firestore document
     await deleteDoc(doc(firestore, 'invoices', invoiceId));
     return true;
   } catch (error) {
